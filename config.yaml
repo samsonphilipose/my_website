@@ -85,23 +85,23 @@ params:
         subtitle: A brief understanding
         title: About me
         url: blogs/aliquam
-      - image: pic02.jpg
-        subtitle: DJIA risk return
+      - image: galaxy.jpg
+        subtitle: A study of sugar and spice
         title: DJIA risk return
         url: blogs/risk_return
-      - image: pic03.jpg
+      - image: sunny.jpg
         subtitle: Lorem Etiam Nullam
         title: Magna
         url: blogs/magna
-      - image: pic04.jpg
+      - image: moon.jpg
         subtitle: Nisl Sed Aliquam
         title: Ipsum
         url: blogs/ipsum
-      - image: pic05.jpg
+      - image: fire.jpg
         subtitle: Ipsum Dolor Sit Amet
         title: Consequat
         url: blogs/ipsum
-      - image: pic06.jpg
+      - image: water.jpg
         subtitle: Feugiat Amet Tempus
         title: Etiam
         url: blogs/ipsum
