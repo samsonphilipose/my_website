@@ -81,14 +81,14 @@ params:
   tiles:
     enable: yes
     showcase:
-      - image: legolas.jpg
+      - image: lego.jfif
         subtitle: A brief understanding
         title: About me
         url: blogs/aliquam
       - image: pic02.jpg
         subtitle: Feugiat Amet Tempus
         title: Tempus
-        url: blogs/tempus
+        url: blogs/risk_return
       - image: pic03.jpg
         subtitle: Lorem Etiam Nullam
         title: Magna
