@@ -15,7 +15,7 @@ params:
   contact:
     address:
       - city: London
-        country: United Kingdome
+        country: United Kingdom
         street: Grove End Road
         title: Address
     buttonClear: Clear
@@ -53,12 +53,12 @@ params:
         url: https://www.instagram.com
       - icon: fa-github
         label: GitHub
-        url: https://www.github.com
+        url: https://github.com/samsonphilipose
       - icon: fa-linkedin
         label: LinkedIn
-        url: https://www.linkedin.com
+        url: www.linkedin.com/in/samsonphil
   image: ''
-  name: Samson
+  name: Samson Philipose
   navigation:
     button1:
       - name: Get Started
