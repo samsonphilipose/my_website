@@ -5,7 +5,7 @@ categories:
 date: "2017-10-31T22:42:51-05:00"
 description: About me
 draft: false
-image: pic07.jpg
+image: profile.png
 keywords: ""
 slug: about_me
 title: Aliquam
