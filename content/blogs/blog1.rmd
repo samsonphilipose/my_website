@@ -90,7 +90,7 @@ ggplot(data = yield_curve %>% filter(year > 1998, maturity == "3m" | maturity ==
 ```
 
 
-
+### US recession dates since 1946
 
 ```{r setup_US-recessions, warning=FALSE}
 
@@ -109,6 +109,7 @@ recessions <- tibble(
 recessions
 ```
 
+### Yield Curve for 
 
 ```{r yield_curve_4, echo=FALSE, out.width="100%"}
 
