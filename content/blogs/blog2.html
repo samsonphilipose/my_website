@@ -3,14 +3,563 @@ categories:
 - ""
 - ""
 date: "2017-10-31T22:26:09-05:00"
-description: Lorem Etiam Nullam
+description: The Youth might be at risk too
 draft: false
 image: pic09.jpg
 keywords: ""
 slug: magna
-title: Magna
+title: YRBSS
 ---
 
 <script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
+<pre><code>## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --</code></pre>
+<pre><code>## v ggplot2 3.3.5     v purrr   0.3.4
+## v tibble  3.1.4     v dplyr   1.0.7
+## v tidyr   1.1.3     v stringr 1.4.0
+## v readr   2.0.1     v forcats 0.5.1</code></pre>
+<pre><code>## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;mosaic&#39;:
+##   method                           from   
+##   fortify.SpatialPolygonsDataFrame ggplot2</code></pre>
+<pre><code>## 
+## The &#39;mosaic&#39; package masks several functions from core packages in order to add 
+## additional features.  The original behavior of these functions should not be affected by this.</code></pre>
+<pre><code>## 
+## Attaching package: &#39;mosaic&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:Matrix&#39;:
+## 
+##     mean</code></pre>
+<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     count, do, tally</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     cross</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     stat</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     binom.test, cor, cor.test, cov, fivenum, IQR, median, prop.test,
+##     quantile, sd, t.test, var</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     max, mean, min, prod, range, sample, sum</code></pre>
+<pre><code>## 
+## Attaching package: &#39;ggthemes&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:mosaic&#39;:
+## 
+##     theme_map</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;GGally&#39;:
+##   method from   
+##   +.gg   ggplot2</code></pre>
+<pre><code>## here() starts at C:/Users/96566/Documents/ca09/my_website</code></pre>
+<pre><code>## 
+## Attaching package: &#39;skimr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:mosaic&#39;:
+## 
+##     n_missing</code></pre>
+<pre><code>## 
+## Attaching package: &#39;janitor&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     chisq.test, fisher.test</code></pre>
+<pre><code>## Loading required package: lubridate</code></pre>
+<pre><code>## 
+## Attaching package: &#39;lubridate&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     date, intersect, setdiff, union</code></pre>
+<pre><code>## Loading required package: PerformanceAnalytics</code></pre>
+<pre><code>## Loading required package: xts</code></pre>
+<pre><code>## Loading required package: zoo</code></pre>
+<pre><code>## 
+## Attaching package: &#39;zoo&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     as.Date, as.Date.numeric</code></pre>
+<pre><code>## 
+## Attaching package: &#39;xts&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     first, last</code></pre>
+<pre><code>## 
+## Attaching package: &#39;PerformanceAnalytics&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:graphics&#39;:
+## 
+##     legend</code></pre>
+<pre><code>## Loading required package: quantmod</code></pre>
+<pre><code>## Loading required package: TTR</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;quantmod&#39;:
+##   method            from
+##   as.zoo.data.frame zoo</code></pre>
+<pre><code>## == Need to Learn tidyquant? ====================================================
+## Business Science offers a 1-hour course - Learning Lab #9: Performance Analysis &amp; Portfolio Optimization with tidyquant!
+## &lt;/&gt; Learn more at: https://university.business-science.io/p/learning-labs-pro &lt;/&gt;</code></pre>
+<pre><code>## 
+## Attaching package: &#39;infer&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:mosaic&#39;:
+## 
+##     prop_test, t_test</code></pre>
+<pre><code>## Loading required package: airports</code></pre>
+<pre><code>## Loading required package: cherryblossom</code></pre>
+<pre><code>## Loading required package: usdata</code></pre>
+<pre><code>## 
+## Attaching package: &#39;openintro&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:mosaic&#39;:
+## 
+##     dotPlot</code></pre>
+<pre><code>## The following objects are masked from &#39;package:lattice&#39;:
+## 
+##     ethanol, lsegments</code></pre>
+<div id="youth-risk-behavior-surveillance" class="section level1">
+<h1>Youth Risk Behavior Surveillance</h1>
+<div id="load-the-data" class="section level2">
+<h2>Load the data</h2>
+<pre class="r"><code>data(yrbss)
+glimpse(yrbss)</code></pre>
+<pre><code>## Rows: 13,583
+## Columns: 13
+## $ age                      &lt;int&gt; 14, 14, 15, 15, 15, 15, 15, 14, 15, 15, 15, 1~
+## $ gender                   &lt;chr&gt; &quot;female&quot;, &quot;female&quot;, &quot;female&quot;, &quot;female&quot;, &quot;fema~
+## $ grade                    &lt;chr&gt; &quot;9&quot;, &quot;9&quot;, &quot;9&quot;, &quot;9&quot;, &quot;9&quot;, &quot;9&quot;, &quot;9&quot;, &quot;9&quot;, &quot;9&quot;, ~
+## $ hispanic                 &lt;chr&gt; &quot;not&quot;, &quot;not&quot;, &quot;hispanic&quot;, &quot;not&quot;, &quot;not&quot;, &quot;not&quot;~
+## $ race                     &lt;chr&gt; &quot;Black or African American&quot;, &quot;Black or Africa~
+## $ height                   &lt;dbl&gt; NA, NA, 1.73, 1.60, 1.50, 1.57, 1.65, 1.88, 1~
+## $ weight                   &lt;dbl&gt; NA, NA, 84.37, 55.79, 46.72, 67.13, 131.54, 7~
+## $ helmet_12m               &lt;chr&gt; &quot;never&quot;, &quot;never&quot;, &quot;never&quot;, &quot;never&quot;, &quot;did not ~
+## $ text_while_driving_30d   &lt;chr&gt; &quot;0&quot;, NA, &quot;30&quot;, &quot;0&quot;, &quot;did not drive&quot;, &quot;did not~
+## $ physically_active_7d     &lt;int&gt; 4, 2, 7, 0, 2, 1, 4, 4, 5, 0, 0, 0, 4, 7, 7, ~
+## $ hours_tv_per_school_day  &lt;chr&gt; &quot;5+&quot;, &quot;5+&quot;, &quot;5+&quot;, &quot;2&quot;, &quot;3&quot;, &quot;5+&quot;, &quot;5+&quot;, &quot;5+&quot;,~
+## $ strength_training_7d     &lt;int&gt; 0, 0, 0, 0, 1, 0, 2, 0, 3, 0, 3, 0, 0, 7, 7, ~
+## $ school_night_hours_sleep &lt;chr&gt; &quot;8&quot;, &quot;6&quot;, &quot;&lt;5&quot;, &quot;6&quot;, &quot;9&quot;, &quot;8&quot;, &quot;9&quot;, &quot;6&quot;, &quot;&lt;5&quot;~</code></pre>
+<pre class="r"><code>yrbss</code></pre>
+<pre><code>## # A tibble: 13,583 x 13
+##      age gender grade hispanic race    height weight helmet_12m text_while_driv~
+##    &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;           
+##  1    14 female 9     not      Black ~  NA      NA   never      0               
+##  2    14 female 9     not      Black ~  NA      NA   never      &lt;NA&gt;            
+##  3    15 female 9     hispanic Native~   1.73   84.4 never      30              
+##  4    15 female 9     not      Black ~   1.6    55.8 never      0               
+##  5    15 female 9     not      Black ~   1.5    46.7 did not r~ did not drive   
+##  6    15 female 9     not      Black ~   1.57   67.1 did not r~ did not drive   
+##  7    15 female 9     not      Black ~   1.65  132.  did not r~ &lt;NA&gt;            
+##  8    14 male   9     not      Black ~   1.88   71.2 never      &lt;NA&gt;            
+##  9    15 male   9     not      Black ~   1.75   63.5 never      &lt;NA&gt;            
+## 10    15 male   10    not      Black ~   1.37   97.1 did not r~ &lt;NA&gt;            
+## # ... with 13,573 more rows, and 4 more variables: physically_active_7d &lt;int&gt;,
+## #   hours_tv_per_school_day &lt;chr&gt;, strength_training_7d &lt;int&gt;,
+## #   school_night_hours_sleep &lt;chr&gt;</code></pre>
+<pre class="r"><code>skimr::skim(yrbss)</code></pre>
+<table>
+<caption><span id="tab:unnamed-chunk-2">Table 1: </span>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">yrbss</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">13583</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">13</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">8</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">5</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">gender</td>
+<td align="right">12</td>
+<td align="right">1.00</td>
+<td align="right">4</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">grade</td>
+<td align="right">79</td>
+<td align="right">0.99</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">hispanic</td>
+<td align="right">231</td>
+<td align="right">0.98</td>
+<td align="right">3</td>
+<td align="right">8</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">race</td>
+<td align="right">2805</td>
+<td align="right">0.79</td>
+<td align="right">5</td>
+<td align="right">41</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">helmet_12m</td>
+<td align="right">311</td>
+<td align="right">0.98</td>
+<td align="right">5</td>
+<td align="right">12</td>
+<td align="right">0</td>
+<td align="right">6</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">text_while_driving_30d</td>
+<td align="right">918</td>
+<td align="right">0.93</td>
+<td align="right">1</td>
+<td align="right">13</td>
+<td align="right">0</td>
+<td align="right">8</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">hours_tv_per_school_day</td>
+<td align="right">338</td>
+<td align="right">0.98</td>
+<td align="right">1</td>
+<td align="right">12</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">school_night_hours_sleep</td>
+<td align="right">1248</td>
+<td align="right">0.91</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">age</td>
+<td align="right">77</td>
+<td align="right">0.99</td>
+<td align="right">16.16</td>
+<td align="right">1.26</td>
+<td align="right">12.00</td>
+<td align="right">15.00</td>
+<td align="right">16.00</td>
+<td align="right">17.00</td>
+<td align="right">18.00</td>
+<td align="left">▁▂▅▅▇</td>
+</tr>
+<tr class="even">
+<td align="left">height</td>
+<td align="right">1004</td>
+<td align="right">0.93</td>
+<td align="right">1.69</td>
+<td align="right">0.10</td>
+<td align="right">1.27</td>
+<td align="right">1.60</td>
+<td align="right">1.68</td>
+<td align="right">1.78</td>
+<td align="right">2.11</td>
+<td align="left">▁▅▇▃▁</td>
+</tr>
+<tr class="odd">
+<td align="left">weight</td>
+<td align="right">1004</td>
+<td align="right">0.93</td>
+<td align="right">67.91</td>
+<td align="right">16.90</td>
+<td align="right">29.94</td>
+<td align="right">56.25</td>
+<td align="right">64.41</td>
+<td align="right">76.20</td>
+<td align="right">180.99</td>
+<td align="left">▆▇▂▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">physically_active_7d</td>
+<td align="right">273</td>
+<td align="right">0.98</td>
+<td align="right">3.90</td>
+<td align="right">2.56</td>
+<td align="right">0.00</td>
+<td align="right">2.00</td>
+<td align="right">4.00</td>
+<td align="right">7.00</td>
+<td align="right">7.00</td>
+<td align="left">▆▂▅▃▇</td>
+</tr>
+<tr class="odd">
+<td align="left">strength_training_7d</td>
+<td align="right">1176</td>
+<td align="right">0.91</td>
+<td align="right">2.95</td>
+<td align="right">2.58</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">3.00</td>
+<td align="right">5.00</td>
+<td align="right">7.00</td>
+<td align="left">▇▂▅▂▅</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="exploratory-data-analysis" class="section level2">
+<h2>Exploratory Data Analysis</h2>
+<p>Using visualization and summary statistics, describe the distribution of weights. How many observations are we missing weights from?</p>
+<p>No missing values. The box plot below shows the distribution of weight and we also draw a table about the mean, median, min, max, and sd of the data.</p>
+<pre class="r"><code>yrbss%&gt;%
+  ggplot(aes(x=weight))+
+  geom_boxplot(outlier.colour=&quot;red&quot;)+
+  theme_economist()</code></pre>
+<pre><code>## Warning: Removed 1004 rows containing non-finite values (stat_boxplot).</code></pre>
+<p><img src="/blogs/blog2_files/figure-html/eda_on_weight-1.png" width="672" /></p>
+<pre class="r"><code>correlation &lt;-COR(x=yrbss$weight, y=yrbss$physically_active_7d)
+
+yrbss%&gt;%
+  summarize(
+    min_weight=min(weight, na.rm=TRUE), 
+    max_weight=max(weight, na.rm=TRUE), 
+    mean_weight=mean(weight, na.rm=TRUE), 
+    median_weight=median(weight, na.rm=TRUE), 
+    sd_weight=sd(weight, na.rm=TRUE))</code></pre>
+<pre><code>## # A tibble: 1 x 5
+##   min_weight max_weight mean_weight median_weight sd_weight
+##        &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;         &lt;dbl&gt;     &lt;dbl&gt;
+## 1       29.9       181.        67.9          64.4      16.9</code></pre>
+<p>Mutate and count of ‘physical_3plus’</p>
+<pre class="r"><code>yrbss%&gt;%
+  ggplot(aes(x=weight, y=physically_active_7d))+
+  geom_point()+
+  geom_smooth(method = lm)+
+  theme_economist() </code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 1219 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 1219 rows containing missing values (geom_point).</code></pre>
+<p><img src="/blogs/blog2_files/figure-html/mutate_and_count-1.png" width="672" /></p>
+<pre class="r"><code>yrbss%&gt;%
+  group_by(physically_active_7d)%&gt;%
+  summarise(mean_weight=mean(weight, na.rm=TRUE))%&gt;%
+  ggplot(aes(x=physically_active_7d, y=mean_weight))+
+  geom_point()+
+  geom_smooth(method = lm)+
+  theme_economist()</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 1 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<p><img src="/blogs/blog2_files/figure-html/mutate_and_count-2.png" width="672" /></p>
+<pre class="r"><code>yrbss_3plus&lt;-
+  yrbss%&gt;%
+  mutate(physical_3plus=ifelse(physically_active_7d&gt;=3,&quot;Yes&quot;,&quot;No&quot;))
+
+yrbss_3plus%&gt;%
+  group_by(physical_3plus)%&gt;%
+  summarise(number_of=n())%&gt;%
+  mutate(percentage_of=number_of/sum(number_of))</code></pre>
+<pre><code>## # A tibble: 3 x 3
+##   physical_3plus number_of percentage_of
+##   &lt;chr&gt;              &lt;int&gt;         &lt;dbl&gt;
+## 1 No                  4404        0.324 
+## 2 Yes                 8906        0.656 
+## 3 &lt;NA&gt;                 273        0.0201</code></pre>
+<pre class="r"><code>ynprop&lt;-yrbss_3plus%&gt;%
+  count(physical_3plus)%&gt;%
+  mutate(Perc_of=n/sum(n))</code></pre>
+<p>Can you provide a 95% confidence interval for the population proportion of high schools that are <em>NOT</em> active 3 or more days per week?</p>
+<pre class="r"><code>prop.test(4404,13310)</code></pre>
+<pre><code>## 
+##  1-sample proportions test with continuity correction
+## 
+## data:  4404 out of 13310
+## X-squared = 1522.1, df = 1, p-value &lt; 2.2e-16
+## alternative hypothesis: true p is not equal to 0.5
+## 95 percent confidence interval:
+##  0.3228978 0.3389583
+## sample estimates:
+##        p 
+## 0.330879</code></pre>
+<p>The boxplot of <code>physical_3plus</code> vs. <code>weight</code>. Is there a relationship between these two variables? What did you expect and why?</p>
+<p>People exercising more seems to have larger weight compared to those exercising less. One of the reasons lies in the more you exercise, the more muscle you will have, which will lead to heavier weight.</p>
+<pre class="r"><code>yrbss_3plus%&gt;%
+  ggplot(aes(x=weight, y=physical_3plus))+
+  geom_boxplot()+
+  theme_economist()</code></pre>
+<pre><code>## Warning: Removed 1004 rows containing non-finite values (stat_boxplot).</code></pre>
+<p><img src="/blogs/blog2_files/figure-html/boxplot-1.png" width="672" /></p>
+</div>
+<div id="confidence-interval" class="section level2">
+<h2>Confidence Interval</h2>
+<pre class="r"><code>formula_ci &lt;- yrbss_3plus %&gt;% 
+  group_by(physical_3plus)%&gt;%
+  summarize(count_response= n(), 
+            mean_response= mean(weight, na.rm = TRUE), 
+            median_response = median(weight, na.rm = TRUE), 
+            sd_response = sd(weight, na.rm = TRUE),
+            ci_lower := mean_response + qnorm(0.025)*sd_response/sqrt(length(yrbss_3plus)), 
+            ci_upper := mean_response + qnorm(0.975)*sd_response/sqrt(length(yrbss_3plus)))
+formula_ci</code></pre>
+<pre><code>## # A tibble: 3 x 7
+##   physical_3plus count_response mean_response median_response sd_response
+##   &lt;chr&gt;                   &lt;int&gt;         &lt;dbl&gt;           &lt;dbl&gt;       &lt;dbl&gt;
+## 1 No                       4404          66.7            62.6        17.6
+## 2 Yes                      8906          68.4            65.8        16.5
+## 3 &lt;NA&gt;                      273          69.9            65.8        17.6
+## # ... with 2 more variables: ci_lower &lt;dbl&gt;, ci_upper &lt;dbl&gt;</code></pre>
+</div>
+<div id="hypothesis-test-with-formula" class="section level2">
+<h2>Hypothesis test with formula</h2>
+<pre class="r"><code>t.test(weight ~ physical_3plus, data = yrbss_3plus)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  weight by physical_3plus
+## t = -5.353, df = 7478.8, p-value = 8.908e-08
+## alternative hypothesis: true difference in means between group No and group Yes is not equal to 0
+## 95 percent confidence interval:
+##  -2.424441 -1.124728
+## sample estimates:
+##  mean in group No mean in group Yes 
+##          66.67389          68.44847</code></pre>
+</div>
+<div id="hypothesis-test-with-infer" class="section level2">
+<h2>Hypothesis test with <code>infer</code></h2>
+<p>Initialize the test, saved as <code>obs_diff</code>.</p>
+<pre class="r"><code>obs_diff &lt;- yrbss_3plus %&gt;%
+  specify(weight ~ physical_3plus) %&gt;%
+  calculate(stat = &quot;diff in means&quot;, order = c(&quot;Yes&quot;, &quot;No&quot;))</code></pre>
+<pre><code>## Warning: Removed 1219 rows containing missing values.</code></pre>
+<pre class="r"><code>obs_diff</code></pre>
+<pre><code>## Response: weight (numeric)
+## Explanatory: physical_3plus (factor)
+## # A tibble: 1 x 1
+##    stat
+##   &lt;dbl&gt;
+## 1  1.77</code></pre>
+<p>Hypothesis_testing_using_infer_package</p>
+<pre class="r"><code>null_dist &lt;- yrbss_3plus %&gt;%
+  # specify variables
+  specify(weight ~ physical_3plus) %&gt;%
+  
+  # assume independence, i.e, there is no difference
+  hypothesize(null = &quot;independence&quot;) %&gt;%
+  
+  # generate 1000 reps, of type &quot;permute&quot;
+  generate(reps = 1000, type = &quot;permute&quot;) %&gt;%
+  
+  # calculate statistic of difference, namely &quot;diff in means&quot;
+  calculate(stat = &quot;diff in means&quot;, order = c(&quot;Yes&quot;, &quot;No&quot;))</code></pre>
+<pre><code>## Warning: Removed 1219 rows containing missing values.</code></pre>
+<pre class="r"><code>null_dist</code></pre>
+<pre><code>## Response: weight (numeric)
+## Explanatory: physical_3plus (factor)
+## Null Hypothesis: independence
+## # A tibble: 1,000 x 2
+##    replicate     stat
+##        &lt;int&gt;    &lt;dbl&gt;
+##  1         1  0.184  
+##  2         2  0.0903 
+##  3         3  0.587  
+##  4         4 -0.324  
+##  5         5 -0.0746 
+##  6         6 -0.622  
+##  7         7  0.604  
+##  8         8  0.0249 
+##  9         9 -0.172  
+## 10        10 -0.00564
+## # ... with 990 more rows</code></pre>
+<p>Visualization:</p>
+<pre class="r"><code>ggplot(data = null_dist, aes(x = stat)) +
+  geom_histogram()</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="/blogs/blog2_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Visualization and p-value</p>
+<pre class="r"><code>null_dist %&gt;% visualize() +
+  shade_p_value(obs_stat = obs_diff, direction = &quot;two-sided&quot;)</code></pre>
+<pre><code>## Warning: F usually corresponds to right-tailed tests. Proceed with caution.</code></pre>
+<p><img src="/blogs/blog2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>null_dist %&gt;%
+  get_p_value(obs_stat = obs_diff, direction = &quot;two_sided&quot;)</code></pre>
+<pre><code>## Warning: Please be cautious in reporting a p-value of 0. This result is an
+## approximation based on the number of `reps` chosen in the `generate()` step. See
+## `?get_p_value()` for more information.</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   p_value
+##     &lt;dbl&gt;
+## 1       0</code></pre>
+</div>
+</div>
