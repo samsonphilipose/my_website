@@ -11,7 +11,7 @@ slug: hello
 title: Yield Curve
 ---
 
-# Challenge 1: Yield Curve inversion
+# Yield Curve inversion
 
 
 
@@ -109,7 +109,7 @@ recessions <- tibble(
 recessions
 ```
 
-### Yield Curve for 
+### Yield Curve for 3 and 10 year bonds
 
 ```{r yield_curve_4, echo=FALSE, out.width="100%"}
 
