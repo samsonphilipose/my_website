@@ -26,7 +26,7 @@ glimpse(movies)</code></pre>
 ## $ director            &lt;chr&gt; &quot;James Cameron&quot;, &quot;James Cameron&quot;, &quot;Colin Trevorrow~
 ## $ year                &lt;dbl&gt; 2009, 1997, 2015, 2012, 2008, 1999, 1977, 2015, 20~
 ## $ duration            &lt;dbl&gt; 178, 194, 124, 173, 152, 136, 125, 141, 164, 93, 1~
-## $ gross               &lt;dbl&gt; 760505847, 658672302, 652177271, 623279547, 533316~
+## $ gross               &lt;dbl&gt; 7.61e+08, 6.59e+08, 6.52e+08, 6.23e+08, 5.33e+08, ~
 ## $ budget              &lt;dbl&gt; 2.37e+08, 2.00e+08, 1.50e+08, 2.20e+08, 1.85e+08, ~
 ## $ cast_facebook_likes &lt;dbl&gt; 4834, 45223, 8458, 87697, 57802, 37723, 13485, 920~
 ## $ votes               &lt;dbl&gt; 886204, 793059, 418214, 995415, 1676169, 534658, 9~
@@ -87,23 +87,8 @@ movies %&gt;% count(genre) %&gt;% arrange(desc(n)) %&gt;% mutate(Genre := genre,
 <li>Produce a table with the average gross earning and budget (<code>gross</code> and <code>budget</code>) by genre. Calculate a variable <code>return_on_budget</code> which shows how many $ did a movie make at the box office for each $ of its budget. Ranked genres by this <code>return_on_budget</code> in descending order</li>
 </ul>
 <pre class="r"><code>#The below table summarizes mean earnings (box office) and mean budget by genre. Entries are ranked by the &quot;return on budget&quot; variable
-library(data.table)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;data.table&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:xts&#39;:
-## 
-##     first, last</code></pre>
-<pre><code>## The following objects are masked from &#39;package:lubridate&#39;:
-## 
-##     hour, isoweek, mday, minute, month, quarter, second, wday, week,
-##     yday, year</code></pre>
-<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
-## 
-##     between, first, last</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     transpose</code></pre>
-<pre class="r"><code>movies &lt;- as.data.table(movies)
+library(data.table)
+movies &lt;- as.data.table(movies)
 movies_by_genre &lt;- movies %&gt;% group_by(genre) %&gt;% summarize(mean_earnings := mean(gross), mean_budget := mean(budget))
 movies_by_genre %&gt;% mutate(return_on_budget =  mean_earnings/mean_budget) %&gt;% arrange(desc(return_on_budget))</code></pre>
 <pre><code>## # A tibble: 17 x 4
@@ -178,25 +163,15 @@ movies %&gt;% group_by(genre) %&gt;% summarize( mean_rating := mean(rating), med
   geom_density() +
   facet_wrap(~genre) +
   labs(title = &quot;Distribution of Ratings by Genre&quot;)</code></pre>
-<pre><code>## Warning: Groups with fewer than two data points have been dropped.</code></pre>
-<pre><code>## Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning
-## -Inf</code></pre>
-<p><img src="/blogs/blog3_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="/blogs/blog3_files/figure-html/unnamed-chunk-7-1.png" width="360" style="display: block; margin: auto;" /></p>
 </div>
 <div id="use-ggplot-to-answer-the-following" class="section level2">
 <h2>Use <code>ggplot</code> to answer the following</h2>
 <ul>
 <li>Examine the relationship between <code>gross</code> and <code>cast_facebook_likes</code>. Produce a scatterplot and write one sentence discussing whether the number of facebook likes that the cast has received is likely to be a good predictor of how much money a movie will make at the box office. What variable are you going to map to the Y- and X- axes?</li>
 </ul>
-<pre class="r"><code>library(mgcv)</code></pre>
-<pre><code>## Loading required package: nlme</code></pre>
-<pre><code>## 
-## Attaching package: &#39;nlme&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
-## 
-##     collapse</code></pre>
-<pre><code>## This is mgcv 1.8-36. For overview type &#39;help(&quot;mgcv-package&quot;)&#39;.</code></pre>
-<pre class="r"><code>library(data.table)</code></pre>
+<pre class="r"><code>library(mgcv)
+library(data.table)</code></pre>
 <pre class="r"><code>library(mgcv)
 library(data.table)
 movies &lt;- as.data.table(movies)
@@ -208,7 +183,7 @@ movies %&gt;% ggplot(aes(x = cast_facebook_likes, y = gross))+
   geom_smooth(method = &quot;lm&quot;, formula = y~x, se = FALSE, color = &quot;green&quot;) +
   geom_smooth(method = &quot;lm&quot;, formula = y~splines::ns(x,df = 3), se = FALSE) + 
   labs(x = &quot;Facebook likes&quot;, y = &quot;Gross box office&quot;)</code></pre>
-<p><img src="/blogs/blog3_files/figure-html/gross_on_fblikes-1.png" width="672" />
+<p><img src="/blogs/blog3_files/figure-html/gross_on_fblikes-1.png" width="360" style="display: block; margin: auto;" />
 <strong>Answer: </strong> The variable <span class="math inline">\(cast_facebook_likes\)</span> is the explanatory variable, and <span class="math inline">\(gross\)</span> is the response variable. The number of facebook likes does not seem to be a good estimate of box office, especially due to presense of outliers, and due to the fact that many movies were created before the Facebook era and were not marketed in social networks. Although linear OLS regression (in green) proposes positive dependancy, a nonlinear method (natural cubic spline, in blue) shows that influence of facebook likes is positive up to some point, and becomes near-zero afterwards.</p>
 <ul>
 <li>Examine the relationship between <code>gross</code> and <code>budget</code>. Produce a scatterplot and write one sentence discussing whether budget is likely to be a good predictor of how much money a movie will make at the box office.</li>
@@ -219,8 +194,7 @@ movies %&gt;% ggplot(aes(x = cast_facebook_likes, y = gross))+
   labs(title = &quot;Gross Earnings vs. Movie Budget&quot;,
        x = &quot;Movie budget&quot;,
        y = &quot;Gross earnings in the US box office&quot;)</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="/blogs/blog3_files/figure-html/gross_on_budget-1.png" width="672" />
+<p><img src="/blogs/blog3_files/figure-html/gross_on_budget-1.png" width="360" style="display: block; margin: auto;" />
 <strong>Answer:</strong> The plot suggests significant positive correlation between budget and box office (see the regression line in blue), hence budget can be used as a predictor for box office forecasting. In addition, film budgets include marketing costs, which largely influence the box office, so budget can be used as a proxy to these costs.</p>
 <ul>
 <li>Examine the relationship between <code>gross</code> and <code>rating</code>. Produce a scatterplot, faceted by <code>genre</code> and discuss whether IMDB ratings are likely to be a good predictor of how much money a movie will make at the box office. Is there anything strange in this dataset?</li>
@@ -232,7 +206,7 @@ movies %&gt;% ggplot(aes(x = cast_facebook_likes, y = gross))+
   labs(title = &quot;Gross Earnings vs. Movie Rating&quot;,
        x = &quot;IMDB Movie rating&quot;,
        y = &quot;Gross earnings in the US box office&quot;)</code></pre>
-<p><img src="/blogs/blog3_files/figure-html/gross_on_rating-1.png" width="672" />
+<p><img src="/blogs/blog3_files/figure-html/gross_on_rating-1.png" width="360" style="display: block; margin: auto;" />
 As we can see, dependency between IMDB rating and box office varies from notable positive (e.g. Action, Adventure) to negative (Documentary). Genres with only a couple points were not taken into account.</p>
 <p>However, this plot shows one very interesting feature of the dataset. Namely, it shows that a lot of movies with both quite high and quite low ratings have near-zero box office. We can suggest that there exists an underlying confounding variable which prevents us from distinction between movies with high rating and low box office and movies with low rating and low box office. Perhaps, the former represent festival-oriented or non-commercial cinema, while the latter are actually low-quality products not interesting to both critics and viewers.</p>
 </div>

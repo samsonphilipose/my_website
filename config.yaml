@@ -94,9 +94,9 @@ params:
         title: A financial model
         url: blogs/magna
       - image: moon.jpg
-        subtitle: Is this kid educated?
-        title: My Educational History
-        url: blogs/ipsum
+        subtitle: More than other numbers to prove a point?
+        title: IMDB Movie ratings
+        url: blogs/tempus
       - image: fire.jfif
         subtitle: I have examples, I promise
         title: Leadership and Soft Skills
