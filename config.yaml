@@ -84,6 +84,7 @@ params:
         subtitle: A glimpse
         title: About me
         url: blogs/about_me
+        
       - image: galaxy.jpg
         subtitle: A study of sugar and spice
         title: DJIA risk return
