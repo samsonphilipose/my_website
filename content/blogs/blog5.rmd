@@ -5,7 +5,7 @@ categories:
 date: "2017-10-31T22:42:51-05:00"
 description: It's too hot!!!
 draft: false
-image: ccc.jpg
+image: ccc.png
 keywords: ""
 slug: kumquat
 title: Climate Change
