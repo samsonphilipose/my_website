@@ -3,10 +3,194 @@ categories:
 - ""
 - ""
 date: "2017-10-31T22:26:09-05:00"
-description: Lorem Etiam Nullam
+description: The Youth might be at risk too
 draft: false
 image: pic09.jpg
 keywords: ""
 slug: magna
-title: Magna
+title: YRBSS
 ---
+
+```{r load-libraries, echo=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(GGally)
+library(readxl)
+library(here)
+library(skimr)
+library(janitor)
+library(broom)
+library(tidyquant)
+library(infer)
+library(openintro)
+```
+
+
+# Youth Risk Behavior Surveillance
+
+## Load the data
+
+```{r}
+data(yrbss)
+glimpse(yrbss)
+yrbss
+```
+
+```{r}
+skimr::skim(yrbss)
+```
+
+## Exploratory Data Analysis
+
+Using visualization and summary statistics, describe the distribution of weights. How many observations are we missing weights from?
+
+No missing values. The box plot below shows the distribution of weight and we also draw a table about the mean, median, min, max, and sd of the data. 
+
+```{r, eda_on_weight}
+
+yrbss%>%
+  ggplot(aes(x=weight))+
+  geom_boxplot(outlier.colour="red")+
+  theme_economist()
+
+correlation <-COR(x=yrbss$weight, y=yrbss$physically_active_7d)
+
+yrbss%>%
+  summarize(
+    min_weight=min(weight, na.rm=TRUE), 
+    max_weight=max(weight, na.rm=TRUE), 
+    mean_weight=mean(weight, na.rm=TRUE), 
+    median_weight=median(weight, na.rm=TRUE), 
+    sd_weight=sd(weight, na.rm=TRUE))
+
+```
+
+Mutate and count of 'physical_3plus'
+
+```{r, mutate_and_count}
+yrbss%>%
+  ggplot(aes(x=weight, y=physically_active_7d))+
+  geom_point()+
+  geom_smooth(method = lm)+
+  theme_economist() 
+
+yrbss%>%
+  group_by(physically_active_7d)%>%
+  summarise(mean_weight=mean(weight, na.rm=TRUE))%>%
+  ggplot(aes(x=physically_active_7d, y=mean_weight))+
+  geom_point()+
+  geom_smooth(method = lm)+
+  theme_economist()
+
+yrbss_3plus<-
+  yrbss%>%
+  mutate(physical_3plus=ifelse(physically_active_7d>=3,"Yes","No"))
+
+yrbss_3plus%>%
+  group_by(physical_3plus)%>%
+  summarise(number_of=n())%>%
+  mutate(percentage_of=number_of/sum(number_of))
+
+ynprop<-yrbss_3plus%>%
+  count(physical_3plus)%>%
+  mutate(Perc_of=n/sum(n))
+
+```
+Can you provide a 95% confidence interval for the population proportion of high schools that are *NOT* active 3 or more days per week?
+
+```{r}
+prop.test(4404,13310)
+
+```
+
+  
+The boxplot of `physical_3plus` vs. `weight`. Is there a relationship between these two variables? What did you expect and why?
+
+People exercising more seems to have larger weight compared to those exercising less. One of the reasons lies in the more you exercise, the more muscle you will have, which will lead to heavier weight. 
+
+```{r, boxplot}
+yrbss_3plus%>%
+  ggplot(aes(x=weight, y=physical_3plus))+
+  geom_boxplot()+
+  theme_economist()
+  
+```
+
+## Confidence Interval
+
+```{r, ci_using_formulas}
+
+formula_ci <- yrbss_3plus %>% 
+  group_by(physical_3plus)%>%
+  summarize(count_response= n(), 
+            mean_response= mean(weight, na.rm = TRUE), 
+            median_response = median(weight, na.rm = TRUE), 
+            sd_response = sd(weight, na.rm = TRUE),
+            ci_lower := mean_response + qnorm(0.025)*sd_response/sqrt(length(yrbss_3plus)), 
+            ci_upper := mean_response + qnorm(0.975)*sd_response/sqrt(length(yrbss_3plus)))
+formula_ci
+
+```
+
+## Hypothesis test with formula
+
+```{r, t_test_using_R}
+
+t.test(weight ~ physical_3plus, data = yrbss_3plus)
+```
+
+
+
+## Hypothesis test with `infer`
+
+Initialize the test, saved as `obs_diff`.
+
+```{r, calc_obs_difference}
+obs_diff <- yrbss_3plus %>%
+  specify(weight ~ physical_3plus) %>%
+  calculate(stat = "diff in means", order = c("Yes", "No"))
+obs_diff
+
+```
+Hypothesis_testing_using_infer_package
+
+```{r, hypothesis_testing_using_infer_package}
+
+null_dist <- yrbss_3plus %>%
+  # specify variables
+  specify(weight ~ physical_3plus) %>%
+  
+  # assume independence, i.e, there is no difference
+  hypothesize(null = "independence") %>%
+  
+  # generate 1000 reps, of type "permute"
+  generate(reps = 1000, type = "permute") %>%
+  
+  # calculate statistic of difference, namely "diff in means"
+  calculate(stat = "diff in means", order = c("Yes", "No"))
+
+null_dist
+
+
+```
+
+Visualization: 
+
+```{r}
+ggplot(data = null_dist, aes(x = stat)) +
+  geom_histogram()
+
+```
+
+Visualization and p-value
+
+```{r}
+
+null_dist %>% visualize() +
+  shade_p_value(obs_stat = obs_diff, direction = "two-sided")
+
+null_dist %>%
+  get_p_value(obs_stat = obs_diff, direction = "two_sided")
+
+```

@@ -90,8 +90,8 @@ params:
         title: DJIA risk return
         url: blogs/risk_return1
       - image: sunny.jpg
-        subtitle: Numbers and numbers
-        title: A financial model
+        subtitle: The Youth might be at risk too
+        title: YRBSS
         url: blogs/magna
       - image: moon.jpg
         subtitle: More than other numbers to prove a point?
@@ -102,9 +102,9 @@ params:
         title: Leadership and Soft Skills
         url: blogs/ipsum
       - image: water.jfif
-        subtitle: What is Samson outside of Finance?
-        title: My Hobbies and Extra-curriculars
-        url: blogs/ipsum
+        subtitle: Climate Change
+        title: It's too hot!!!
+        url: blogs/kumquat
   two:
     buttonText: Get Started
     enable: yes

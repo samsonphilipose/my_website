@@ -163,7 +163,7 @@ movies %&gt;% group_by(genre) %&gt;% summarize( mean_rating := mean(rating), med
   geom_density() +
   facet_wrap(~genre) +
   labs(title = &quot;Distribution of Ratings by Genre&quot;)</code></pre>
-<p><img src="/blogs/blog3_files/figure-html/unnamed-chunk-7-1.png" width="360" style="display: block; margin: auto;" /></p>
+<p><img src="/blogs/blog3_files/figure-html/unnamed-chunk-7-1.png" width="168" style="display: block; margin: auto;" /></p>
 </div>
 <div id="use-ggplot-to-answer-the-following" class="section level2">
 <h2>Use <code>ggplot</code> to answer the following</h2>
@@ -183,7 +183,7 @@ movies %&gt;% ggplot(aes(x = cast_facebook_likes, y = gross))+
   geom_smooth(method = &quot;lm&quot;, formula = y~x, se = FALSE, color = &quot;green&quot;) +
   geom_smooth(method = &quot;lm&quot;, formula = y~splines::ns(x,df = 3), se = FALSE) + 
   labs(x = &quot;Facebook likes&quot;, y = &quot;Gross box office&quot;)</code></pre>
-<p><img src="/blogs/blog3_files/figure-html/gross_on_fblikes-1.png" width="360" style="display: block; margin: auto;" />
+<p><img src="/blogs/blog3_files/figure-html/gross_on_fblikes-1.png" width="168" style="display: block; margin: auto;" />
 <strong>Answer: </strong> The variable <span class="math inline">\(cast_facebook_likes\)</span> is the explanatory variable, and <span class="math inline">\(gross\)</span> is the response variable. The number of facebook likes does not seem to be a good estimate of box office, especially due to presense of outliers, and due to the fact that many movies were created before the Facebook era and were not marketed in social networks. Although linear OLS regression (in green) proposes positive dependancy, a nonlinear method (natural cubic spline, in blue) shows that influence of facebook likes is positive up to some point, and becomes near-zero afterwards.</p>
 <ul>
 <li>Examine the relationship between <code>gross</code> and <code>budget</code>. Produce a scatterplot and write one sentence discussing whether budget is likely to be a good predictor of how much money a movie will make at the box office.</li>
@@ -194,7 +194,7 @@ movies %&gt;% ggplot(aes(x = cast_facebook_likes, y = gross))+
   labs(title = &quot;Gross Earnings vs. Movie Budget&quot;,
        x = &quot;Movie budget&quot;,
        y = &quot;Gross earnings in the US box office&quot;)</code></pre>
-<p><img src="/blogs/blog3_files/figure-html/gross_on_budget-1.png" width="360" style="display: block; margin: auto;" />
+<p><img src="/blogs/blog3_files/figure-html/gross_on_budget-1.png" width="168" style="display: block; margin: auto;" />
 <strong>Answer:</strong> The plot suggests significant positive correlation between budget and box office (see the regression line in blue), hence budget can be used as a predictor for box office forecasting. In addition, film budgets include marketing costs, which largely influence the box office, so budget can be used as a proxy to these costs.</p>
 <ul>
 <li>Examine the relationship between <code>gross</code> and <code>rating</code>. Produce a scatterplot, faceted by <code>genre</code> and discuss whether IMDB ratings are likely to be a good predictor of how much money a movie will make at the box office. Is there anything strange in this dataset?</li>
@@ -206,7 +206,7 @@ movies %&gt;% ggplot(aes(x = cast_facebook_likes, y = gross))+
   labs(title = &quot;Gross Earnings vs. Movie Rating&quot;,
        x = &quot;IMDB Movie rating&quot;,
        y = &quot;Gross earnings in the US box office&quot;)</code></pre>
-<p><img src="/blogs/blog3_files/figure-html/gross_on_rating-1.png" width="360" style="display: block; margin: auto;" />
+<p><img src="/blogs/blog3_files/figure-html/gross_on_rating-1.png" width="168" style="display: block; margin: auto;" />
 As we can see, dependency between IMDB rating and box office varies from notable positive (e.g. Action, Adventure) to negative (Documentary). Genres with only a couple points were not taken into account.</p>
 <p>However, this plot shows one very interesting feature of the dataset. Namely, it shows that a lot of movies with both quite high and quite low ratings have near-zero box office. We can suggest that there exists an underlying confounding variable which prevents us from distinction between movies with high rating and low box office and movies with low rating and low box office. Perhaps, the former represent festival-oriented or non-commercial cinema, while the latter are actually low-quality products not interesting to both critics and viewers.</p>
 </div>
