@@ -3,7 +3,7 @@ categories:
 - ""
 - ""
 date: "2017-10-31T21:28:43-05:00"
-description: "This is the Yield Curve Inversion"
+description: "Stonks or Not Stonks?"
 draft: false
 image: pic101.jpg
 keywords: ""
