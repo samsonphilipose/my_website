@@ -43,10 +43,10 @@ params:
     social:
       - icon: fa-twitter
         label: Twitter
-        url: https://www.twitter.com
+        url: https://twitter.com/Samsonnsays
       - icon: fa-facebook
         label: Facebook
-        url: https://www.facebook.com
+        url: https://www.facebook.com/samson.manoj.37/
       - icon: fa-instagram
         label: Instagram
         url: https://www.instagram.com/craftimagus/?hl=en-gb
@@ -83,11 +83,11 @@ params:
       - image: lego.jfif
         subtitle: A glimpse
         title: About me
-        url: blogs/aliquam
+        url: blogs/about_me
       - image: galaxy.jpg
         subtitle: A study of sugar and spice
         title: DJIA risk return
-        url: blogs/risk_return
+        url: blogs/risk_return1
       - image: sunny.jpg
         subtitle: Numbers and numbers
         title: A financial model

@@ -9,7 +9,7 @@ draft: false
 image: spices.jpg # save picture in \static\img\blogs. Acceptable formats= jpg, jpeg, or png . Your iPhone pics wont work
 
 keywords: ""
-slug: risk_return # slug is the shorthand URL address... no spaces plz
+slug: risk_return1 # slug is the shorthand URL address... no spaces plz
 title: Risk-Return of DJIA stocks
 ---
   
@@ -153,6 +153,7 @@ myStocks_returns_monthly %>%
 
 ```
 
+As seen above, most of the stocks except NKE and AAPL are normally distributed which means the prices more or less stay within the same range of change in computing capital gain. Their rise or fall will be between those ranges. Risk is quantified as this possibility of a rise or fall in prices.
 
 ```{r, risk_return, echo=FALSE}
 
@@ -190,3 +191,4 @@ by_year_monthly %>%
   NULL
 
 ```
+The greatest increase in risk can be seen in 2020 due to the onset of the COVID-19 pandemic. The fall in economic optimism and the increase in layoffs made the stock market exist in stark comparison to the well-perdorming market. This is largely attributed to the efforts of the Federal Reserve in pumping in trillions of dollars in relief bills.
