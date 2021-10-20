@@ -3,7 +3,8 @@ categories:
 - ""    #the front matter should be like the one found in, e.g., blog2.md. It cannot be like the normal Rmd we used
 - ""
 date: "2021-09-30"
-description: Risk-Return of DJIA stocks # the title that will show up once someone gets to this page
+description: Risk-Return of DJIA stocks ~ A study of sugar and spice
+# the title that will show up once someone gets to this page
 draft: false
 image: spices.jpg # save picture in \static\img\blogs. Acceptable formats= jpg, jpeg, or png . Your iPhone pics wont work
 
@@ -49,9 +50,9 @@ library(ggrepel)
 
 # Returns of financial stocks
 
-Next, let's choose the [Dow Jones Industrial Average (DJIA)](https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average) stocks and their ticker symbols and download some data. Besides the thirty stocks that make up the DJIA, we will also add `SPY` which is an SP500 ETF (Exchange Traded Fund).
+To find the returns of stocks, we need to use the DJIA [Dow Jones Industrial Average (DJIA)](https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average) stocks, their tickers and download some data. \n We will also add the SP500 ETF (Exchange Traded Fund) `SPY` to the DJIA 30.
 
-We will use the `rvest` package to scrape the Wikipedia page for the constituents of DJIA
+The`rvest` package will scrape the Wikipedia page for the constituents of DJIA
 
 ```{r, tickers_from_wikipedia}
 
@@ -107,7 +108,7 @@ myStocks <- tickers %>%
 glimpse(myStocks) # examine the structure of the resulting data frame
 ```
 
-Financial performance analysis depend on returns; If I buy a stock today for 100 and I sell it tomorrow for 101.75, my one-day return, assuming no transaction costs, is 1.75%. So given the adjusted closing prices, our first step is to calculate daily and monthly returns.
+Stock performance is mainly determined by way of capital gain returns for day traders i.e.,if I a stock is purchased today for 100 and it's tomorrow for 101.75, the one-day return, ignoring transaction charges, is 1.75%. Since we are given the adjusted closing prices, the first step is to calculate our daily and monthly returns.
 
 
 ```{r calculate_returns, message=FALSE, warning=FALSE, cache=TRUE}
