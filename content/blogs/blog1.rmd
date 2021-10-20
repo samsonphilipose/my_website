@@ -7,7 +7,7 @@ description: "Stonks or Not Stonks?"
 draft: false
 image: pic101.jpg
 keywords: ""
-slug: ipsum
+slug: hello
 title: Yield Curve
 ---
 

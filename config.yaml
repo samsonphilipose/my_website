@@ -100,7 +100,7 @@ params:
       - image: fire.jfif
         subtitle: Stonks or Not Stonks?
         title: Yield Curve Inversion
-        url: blogs/ipsum
+        url: blogs/hello
       - image: water.jfif
         subtitle: Climate Change
         title: It's too hot!!!
