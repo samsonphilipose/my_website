@@ -3,13 +3,157 @@ categories:
 - ""
 - ""
 date: "2017-10-31T22:26:13-05:00"
-description: Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna
-  sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa
-  sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem
-  consequat tincidunt. Vivamus et sagittis tempus.
+description: 
 draft: false
-image: pic08.jpg
+image: pic081.jpg
 keywords: ""
 slug: tempus
-title: Tempus
+title: Analysis of movies- IMDB dataset
 ---
+```{r load-libraries, warning=FALSE, message=FALSE, echo=FALSE}
+library(tidyverse)  
+library(mosaic)
+library(ggthemes)
+library(lubridate)
+library(fivethirtyeight)
+library(here)
+library(ggplot2)
+library(dplyr)
+library(skimr)
+library(janitor)
+library(vroom)
+library(tidyquant)
+library(rvest)
+library(ggrepel)
+library(lubridate)
+library(fivethirtyeight)
+```
+# Analysis of movies- IMDB dataset
+  
+```{r,load_movies, warning=FALSE, message=FALSE}
+movies <- read_csv("/Users/96566/Documents/ca09/my_website/data/movies.csv")
+#movies <- read_csv(here::here("data", "movies.csv"))
+glimpse(movies)
+
+```
+
+Besides the obvious variables of `title`, `genre`, `director`, `year`, and `duration`, the rest of the variables are as follows:
+
+- `gross` : The gross earnings in the US box office, not adjusted for inflation
+- `budget`: The movie's budget 
+- `cast_facebook_likes`: the number of facebook likes cast memebrs received
+- `votes`: the number of people who voted for (or rated) the movie in IMDB 
+- `reviews`: the number of reviews for that movie
+- `rating`: IMDB average rating 
+
+## Use your data import, inspection, and cleaning skills to answer the following:
+
+- Are there any missing values (NAs)? Are all entries distinct or are there duplicate entries?
+
+```{r}
+apply(movies, 2, function(x) any(is.na(x)))
+
+
+```
+**Answer:** As we can see, all colunms of the dataframe contain to missing values.
+
+```{r}
+duplicates <- duplicated(movies)
+print(sum(duplicates == "TRUE"))
+
+```
+**Answer: **Apparently, there are no duplicate entries in the dataset. Hence, all entries in the dataset are distinct.
+
+- Produce a table with the count of movies by genre, ranked in descending order
+
+```{r}
+#Arrange movies by genre in descending order:
+movies %>% count(genre) %>% arrange(desc(n)) %>% mutate(Genre := genre, Quantity := n, genre := NULL, n := NULL)
+```
+
+- Produce a table with the average gross earning and budget (`gross` and `budget`) by genre. Calculate a variable `return_on_budget` which shows how many $ did a movie make at the box office for each $ of its budget. Ranked genres by this `return_on_budget` in descending order
+
+```{r}
+#The below table summarizes mean earnings (box office) and mean budget by genre. Entries are ranked by the "return on budget" variable
+library(data.table)
+movies <- as.data.table(movies)
+movies_by_genre <- movies %>% group_by(genre) %>% summarize(mean_earnings := mean(gross), mean_budget := mean(budget))
+movies_by_genre %>% mutate(return_on_budget =  mean_earnings/mean_budget) %>% arrange(desc(return_on_budget))
+```
+
+- Produce a table that shows the top 15 directors who have created the highest gross revenue in the box office. Don't just show the total gross amount, but also the mean, median, and standard deviation per director.
+
+```{r}
+#Below table provides descriptive statistics of box offices of 15 top-earning directors
+movies %>% group_by(director) %>% summarize(total_gross := sum(gross), mean_gross := mean(gross), median_gross := median(gross), sd_gross := sd(gross)) %>% arrange(desc(total_gross)) %>% head(15)
+```
+
+- Finally, ratings. Produce a table that describes how ratings are distributed by genre. We don't want just the mean, but also, min, max, median, SD and some kind of a histogram or density graph that visually shows how ratings are distributed. 
+
+```{r}
+#Descriptive statistics of movies summarized by genre are provided below:
+movies %>% group_by(genre) %>% summarize( mean_rating := mean(rating), median_rating := median(rating), sd_rating := sd(rating), min_rating := min(rating), max_rating := max(rating)) %>% arrange(desc(mean_rating))
+
+```
+
+```{r}
+ggplot(movies, aes(x = rating)) +
+  geom_density() +
+  facet_wrap(~genre) +
+  labs(title = "Distribution of Ratings by Genre")
+```
+
+## Use `ggplot` to answer the following
+
+  - Examine the relationship between `gross` and `cast_facebook_likes`. Produce a scatterplot and write one sentence discussing whether the number of facebook likes that the cast has received is likely to be a good predictor of how much money a movie will make at the box office. What variable are you going to map to the Y- and X- axes?
+  
+  
+```{r}
+library(mgcv)
+library(data.table)
+```
+
+
+```{r, gross_on_fblikes}
+library(mgcv)
+library(data.table)
+movies <- as.data.table(movies)
+outliers <- boxplot(movies$cast_facebook_likes, plot=FALSE)$out
+movies <- movies[-which(movies$cast_facebook_likes %in% outliers),]
+
+movies %>% ggplot(aes(x = cast_facebook_likes, y = gross))+ 
+  geom_point() +
+  geom_smooth(method = "lm", formula = y~x, se = FALSE, color = "green") +
+  geom_smooth(method = "lm", formula = y~splines::ns(x,df = 3), se = FALSE) + 
+  labs(x = "Facebook likes", y = "Gross box office")
+```
+**Answer: ** The variable $cast_facebook_likes$ is the explanatory variable, and $gross$ is the response variable. The number of facebook likes does not seem to be a good estimate of box office, especially due to presense of outliers, and due to the fact that many movies were created before the Facebook era and were not marketed in social networks. Although linear OLS regression (in green) proposes positive dependancy, a nonlinear method (natural cubic spline, in blue) shows that influence of facebook likes is positive up to some point, and becomes near-zero afterwards. 
+
+  - Examine the relationship between `gross` and `budget`. Produce a scatterplot and write one sentence discussing whether budget is likely to be a good predictor of how much money a movie will make at the box office.
+
+```{r, gross_on_budget}
+movies %>% ggplot(aes(x = budget, y = gross))+ 
+  geom_point() +
+  geom_smooth(method = lm) +
+  labs(title = "Gross Earnings vs. Movie Budget",
+       x = "Movie budget",
+       y = "Gross earnings in the US box office")
+```
+   **Answer:** The plot suggests significant positive correlation between budget and box office (see the regression line in blue), hence budget can be used as a predictor for box office forecasting. In addition, film budgets include marketing costs, which largely influence the box office, so budget can be used as a proxy to these costs.
+  
+  - Examine the relationship between `gross` and `rating`. Produce a scatterplot, faceted by `genre` and discuss whether IMDB ratings are likely to be a good predictor of how much money a movie will make at the box office. Is there anything strange in this dataset?
+  
+
+
+```{r, gross_on_rating, warning = FALSE}
+movies %>% ggplot(aes(x = rating, y = gross))+ 
+  geom_point(size = 0.5) +
+  geom_smooth(method = "lm", formula = y ~x, size = 0.4)+
+  facet_wrap(~genre)+ 
+  labs(title = "Gross Earnings vs. Movie Rating",
+       x = "IMDB Movie rating",
+       y = "Gross earnings in the US box office")
+```
+As we can see, dependency between IMDB rating and box office varies from notable positive (e.g. Action, Adventure) to negative (Documentary). Genres with only a couple points were not taken into account. 
+
+However, this plot shows one very interesting feature of the dataset. Namely, it shows that a lot of movies with both quite high and quite low ratings have near-zero box office. We can suggest that there exists an underlying confounding variable which prevents us from distinction between movies with high rating and low box office and movies with low rating and low box office. Perhaps, the former represent festival-oriented or non-commercial cinema, while the latter are actually low-quality products not interesting to both critics and viewers.

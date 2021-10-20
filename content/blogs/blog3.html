@@ -3,17 +3,237 @@ categories:
 - ""
 - ""
 date: "2017-10-31T22:26:13-05:00"
-description: Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna
-  sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa
-  sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem
-  consequat tincidunt. Vivamus et sagittis tempus.
+description: 
 draft: false
-image: pic08.jpg
+image: pic081.jpg
 keywords: ""
 slug: tempus
-title: Tempus
+title: Analysis of movies- IMDB dataset
 ---
 
 <script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
+<div id="analysis-of-movies--imdb-dataset" class="section level1">
+<h1>Analysis of movies- IMDB dataset</h1>
+<pre class="r"><code>movies &lt;- read_csv(&quot;/Users/96566/Documents/ca09/my_website/data/movies.csv&quot;)
+#movies &lt;- read_csv(here::here(&quot;data&quot;, &quot;movies.csv&quot;))
+glimpse(movies)</code></pre>
+<pre><code>## Rows: 2,961
+## Columns: 11
+## $ title               &lt;chr&gt; &quot;Avatar&quot;, &quot;Titanic&quot;, &quot;Jurassic World&quot;, &quot;The Avenge~
+## $ genre               &lt;chr&gt; &quot;Action&quot;, &quot;Drama&quot;, &quot;Action&quot;, &quot;Action&quot;, &quot;Action&quot;, &quot;~
+## $ director            &lt;chr&gt; &quot;James Cameron&quot;, &quot;James Cameron&quot;, &quot;Colin Trevorrow~
+## $ year                &lt;dbl&gt; 2009, 1997, 2015, 2012, 2008, 1999, 1977, 2015, 20~
+## $ duration            &lt;dbl&gt; 178, 194, 124, 173, 152, 136, 125, 141, 164, 93, 1~
+## $ gross               &lt;dbl&gt; 760505847, 658672302, 652177271, 623279547, 533316~
+## $ budget              &lt;dbl&gt; 2.37e+08, 2.00e+08, 1.50e+08, 2.20e+08, 1.85e+08, ~
+## $ cast_facebook_likes &lt;dbl&gt; 4834, 45223, 8458, 87697, 57802, 37723, 13485, 920~
+## $ votes               &lt;dbl&gt; 886204, 793059, 418214, 995415, 1676169, 534658, 9~
+## $ reviews             &lt;dbl&gt; 3777, 2843, 1934, 2425, 5312, 3917, 1752, 1752, 35~
+## $ rating              &lt;dbl&gt; 7.9, 7.7, 7.0, 8.1, 9.0, 6.5, 8.7, 7.5, 8.5, 7.2, ~</code></pre>
+<p>Besides the obvious variables of <code>title</code>, <code>genre</code>, <code>director</code>, <code>year</code>, and <code>duration</code>, the rest of the variables are as follows:</p>
+<ul>
+<li><code>gross</code> : The gross earnings in the US box office, not adjusted for inflation</li>
+<li><code>budget</code>: The movie’s budget</li>
+<li><code>cast_facebook_likes</code>: the number of facebook likes cast memebrs received</li>
+<li><code>votes</code>: the number of people who voted for (or rated) the movie in IMDB</li>
+<li><code>reviews</code>: the number of reviews for that movie</li>
+<li><code>rating</code>: IMDB average rating</li>
+</ul>
+<div id="use-your-data-import-inspection-and-cleaning-skills-to-answer-the-following" class="section level2">
+<h2>Use your data import, inspection, and cleaning skills to answer the following:</h2>
+<ul>
+<li>Are there any missing values (NAs)? Are all entries distinct or are there duplicate entries?</li>
+</ul>
+<pre class="r"><code>apply(movies, 2, function(x) any(is.na(x)))</code></pre>
+<pre><code>##               title               genre            director                year 
+##               FALSE               FALSE               FALSE               FALSE 
+##            duration               gross              budget cast_facebook_likes 
+##               FALSE               FALSE               FALSE               FALSE 
+##               votes             reviews              rating 
+##               FALSE               FALSE               FALSE</code></pre>
+<p><strong>Answer:</strong> As we can see, all colunms of the dataframe contain to missing values.</p>
+<pre class="r"><code>duplicates &lt;- duplicated(movies)
+print(sum(duplicates == &quot;TRUE&quot;))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<p><strong>Answer: </strong>Apparently, there are no duplicate entries in the dataset. Hence, all entries in the dataset are distinct.</p>
+<ul>
+<li>Produce a table with the count of movies by genre, ranked in descending order</li>
+</ul>
+<pre class="r"><code>#Arrange movies by genre in descending order:
+movies %&gt;% count(genre) %&gt;% arrange(desc(n)) %&gt;% mutate(Genre := genre, Quantity := n, genre := NULL, n := NULL)</code></pre>
+<pre><code>## # A tibble: 17 x 2
+##    Genre       Quantity
+##    &lt;chr&gt;          &lt;int&gt;
+##  1 Comedy           848
+##  2 Action           738
+##  3 Drama            498
+##  4 Adventure        288
+##  5 Crime            202
+##  6 Biography        135
+##  7 Horror           131
+##  8 Animation         35
+##  9 Fantasy           28
+## 10 Documentary       25
+## 11 Mystery           16
+## 12 Sci-Fi             7
+## 13 Family             3
+## 14 Musical            2
+## 15 Romance            2
+## 16 Western            2
+## 17 Thriller           1</code></pre>
+<ul>
+<li>Produce a table with the average gross earning and budget (<code>gross</code> and <code>budget</code>) by genre. Calculate a variable <code>return_on_budget</code> which shows how many $ did a movie make at the box office for each $ of its budget. Ranked genres by this <code>return_on_budget</code> in descending order</li>
+</ul>
+<pre class="r"><code>#The below table summarizes mean earnings (box office) and mean budget by genre. Entries are ranked by the &quot;return on budget&quot; variable
+library(data.table)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;data.table&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:xts&#39;:
+## 
+##     first, last</code></pre>
+<pre><code>## The following objects are masked from &#39;package:lubridate&#39;:
+## 
+##     hour, isoweek, mday, minute, month, quarter, second, wday, week,
+##     yday, year</code></pre>
+<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     between, first, last</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     transpose</code></pre>
+<pre class="r"><code>movies &lt;- as.data.table(movies)
+movies_by_genre &lt;- movies %&gt;% group_by(genre) %&gt;% summarize(mean_earnings := mean(gross), mean_budget := mean(budget))
+movies_by_genre %&gt;% mutate(return_on_budget =  mean_earnings/mean_budget) %&gt;% arrange(desc(return_on_budget))</code></pre>
+<pre><code>## # A tibble: 17 x 4
+##    genre       mean_earnings mean_budget return_on_budget
+##    &lt;chr&gt;               &lt;dbl&gt;       &lt;dbl&gt;            &lt;dbl&gt;
+##  1 Musical         92084000     3189500          28.9    
+##  2 Family         149160478.   14833333.         10.1    
+##  3 Western         20821884     3465000           6.01   
+##  4 Documentary     17353973.    5887852.          2.95   
+##  5 Horror          37713738.   13504916.          2.79   
+##  6 Fantasy         42408841.   17582143.          2.41   
+##  7 Comedy          42630552.   24446319.          1.74   
+##  8 Mystery         67533021.   39218750           1.72   
+##  9 Animation       98433792.   61701429.          1.60   
+## 10 Biography       45201805.   28543696.          1.58   
+## 11 Adventure       95794257.   66290069.          1.45   
+## 12 Drama           37465371.   26242933.          1.43   
+## 13 Crime           37502397.   26596169.          1.41   
+## 14 Romance         31264848.   25107500           1.25   
+## 15 Action          86583860.   71354888.          1.21   
+## 16 Sci-Fi          29788371.   27607143.          1.08   
+## 17 Thriller            2468      300000           0.00823</code></pre>
+<ul>
+<li>Produce a table that shows the top 15 directors who have created the highest gross revenue in the box office. Don’t just show the total gross amount, but also the mean, median, and standard deviation per director.</li>
+</ul>
+<pre class="r"><code>#Below table provides descriptive statistics of box offices of 15 top-earning directors
+movies %&gt;% group_by(director) %&gt;% summarize(total_gross := sum(gross), mean_gross := mean(gross), median_gross := median(gross), sd_gross := sd(gross)) %&gt;% arrange(desc(total_gross)) %&gt;% head(15)</code></pre>
+<pre><code>## # A tibble: 15 x 5
+##    director          total_gross mean_gross median_gross   sd_gross
+##    &lt;chr&gt;                   &lt;dbl&gt;      &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
+##  1 Steven Spielberg   4014061704 174524422.   164435221  101421051.
+##  2 Michael Bay        2231242537 171634041.   138396624  127161579.
+##  3 Tim Burton         2071275480 129454718.    76519172  108726924.
+##  4 Sam Raimi          2014600898 201460090.   234903076  162126632.
+##  5 James Cameron      1909725910 318287652.   175562880. 309171337.
+##  6 Christopher Nolan  1813227576 226653447    196667606. 187224133.
+##  7 George Lucas       1741418480 348283696    380262555  146193880.
+##  8 Robert Zemeckis    1619309108 124562239.   100853835   91300279.
+##  9 Clint Eastwood     1378321100  72543216.    46700000   75487408.
+## 10 Francis Lawrence   1358501971 271700394.   281666058  135437020.
+## 11 Ron Howard         1335988092 111332341    101587923   81933761.
+## 12 Gore Verbinski     1329600995 189942999.   123207194  154473822.
+## 13 Andrew Adamson     1137446920 284361730    279680930. 120895765.
+## 14 Shawn Levy         1129750988 102704635.    85463309   65484773.
+## 15 Ridley Scott       1128857598  80632686.    47775715   68812285.</code></pre>
+<ul>
+<li>Finally, ratings. Produce a table that describes how ratings are distributed by genre. We don’t want just the mean, but also, min, max, median, SD and some kind of a histogram or density graph that visually shows how ratings are distributed.</li>
+</ul>
+<pre class="r"><code>#Descriptive statistics of movies summarized by genre are provided below:
+movies %&gt;% group_by(genre) %&gt;% summarize( mean_rating := mean(rating), median_rating := median(rating), sd_rating := sd(rating), min_rating := min(rating), max_rating := max(rating)) %&gt;% arrange(desc(mean_rating))</code></pre>
+<pre><code>## # A tibble: 17 x 6
+##    genre       mean_rating median_rating sd_rating min_rating max_rating
+##    &lt;chr&gt;             &lt;dbl&gt;         &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+##  1 Biography          7.11          7.2      0.760        4.5        8.9
+##  2 Crime              6.92          6.9      0.849        4.8        9.3
+##  3 Mystery            6.86          6.9      0.882        4.6        8.5
+##  4 Musical            6.75          6.75     0.636        6.3        7.2
+##  5 Drama              6.73          6.8      0.917        2.1        8.8
+##  6 Documentary        6.66          7.4      1.77         1.6        8.5
+##  7 Sci-Fi             6.66          6.4      1.09         5          8.2
+##  8 Animation          6.65          6.9      0.968        4.5        8  
+##  9 Romance            6.65          6.65     0.636        6.2        7.1
+## 10 Adventure          6.51          6.6      1.09         2.3        8.6
+## 11 Family             6.5           5.9      1.22         5.7        7.9
+## 12 Action             6.23          6.3      1.03         2.1        9  
+## 13 Fantasy            6.15          6.45     0.959        4.3        7.9
+## 14 Comedy             6.11          6.2      1.02         1.9        8.8
+## 15 Horror             5.83          5.9      1.01         3.6        8.5
+## 16 Western            5.7           5.7      2.26         4.1        7.3
+## 17 Thriller           4.8           4.8     NA            4.8        4.8</code></pre>
+<pre class="r"><code>ggplot(movies, aes(x = rating)) +
+  geom_density() +
+  facet_wrap(~genre) +
+  labs(title = &quot;Distribution of Ratings by Genre&quot;)</code></pre>
+<pre><code>## Warning: Groups with fewer than two data points have been dropped.</code></pre>
+<pre><code>## Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning
+## -Inf</code></pre>
+<p><img src="/blogs/blog3_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="use-ggplot-to-answer-the-following" class="section level2">
+<h2>Use <code>ggplot</code> to answer the following</h2>
+<ul>
+<li>Examine the relationship between <code>gross</code> and <code>cast_facebook_likes</code>. Produce a scatterplot and write one sentence discussing whether the number of facebook likes that the cast has received is likely to be a good predictor of how much money a movie will make at the box office. What variable are you going to map to the Y- and X- axes?</li>
+</ul>
+<pre class="r"><code>library(mgcv)</code></pre>
+<pre><code>## Loading required package: nlme</code></pre>
+<pre><code>## 
+## Attaching package: &#39;nlme&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     collapse</code></pre>
+<pre><code>## This is mgcv 1.8-36. For overview type &#39;help(&quot;mgcv-package&quot;)&#39;.</code></pre>
+<pre class="r"><code>library(data.table)</code></pre>
+<pre class="r"><code>library(mgcv)
+library(data.table)
+movies &lt;- as.data.table(movies)
+outliers &lt;- boxplot(movies$cast_facebook_likes, plot=FALSE)$out
+movies &lt;- movies[-which(movies$cast_facebook_likes %in% outliers),]
+
+movies %&gt;% ggplot(aes(x = cast_facebook_likes, y = gross))+ 
+  geom_point() +
+  geom_smooth(method = &quot;lm&quot;, formula = y~x, se = FALSE, color = &quot;green&quot;) +
+  geom_smooth(method = &quot;lm&quot;, formula = y~splines::ns(x,df = 3), se = FALSE) + 
+  labs(x = &quot;Facebook likes&quot;, y = &quot;Gross box office&quot;)</code></pre>
+<p><img src="/blogs/blog3_files/figure-html/gross_on_fblikes-1.png" width="672" />
+<strong>Answer: </strong> The variable <span class="math inline">\(cast_facebook_likes\)</span> is the explanatory variable, and <span class="math inline">\(gross\)</span> is the response variable. The number of facebook likes does not seem to be a good estimate of box office, especially due to presense of outliers, and due to the fact that many movies were created before the Facebook era and were not marketed in social networks. Although linear OLS regression (in green) proposes positive dependancy, a nonlinear method (natural cubic spline, in blue) shows that influence of facebook likes is positive up to some point, and becomes near-zero afterwards.</p>
+<ul>
+<li>Examine the relationship between <code>gross</code> and <code>budget</code>. Produce a scatterplot and write one sentence discussing whether budget is likely to be a good predictor of how much money a movie will make at the box office.</li>
+</ul>
+<pre class="r"><code>movies %&gt;% ggplot(aes(x = budget, y = gross))+ 
+  geom_point() +
+  geom_smooth(method = lm) +
+  labs(title = &quot;Gross Earnings vs. Movie Budget&quot;,
+       x = &quot;Movie budget&quot;,
+       y = &quot;Gross earnings in the US box office&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="/blogs/blog3_files/figure-html/gross_on_budget-1.png" width="672" />
+<strong>Answer:</strong> The plot suggests significant positive correlation between budget and box office (see the regression line in blue), hence budget can be used as a predictor for box office forecasting. In addition, film budgets include marketing costs, which largely influence the box office, so budget can be used as a proxy to these costs.</p>
+<ul>
+<li>Examine the relationship between <code>gross</code> and <code>rating</code>. Produce a scatterplot, faceted by <code>genre</code> and discuss whether IMDB ratings are likely to be a good predictor of how much money a movie will make at the box office. Is there anything strange in this dataset?</li>
+</ul>
+<pre class="r"><code>movies %&gt;% ggplot(aes(x = rating, y = gross))+ 
+  geom_point(size = 0.5) +
+  geom_smooth(method = &quot;lm&quot;, formula = y ~x, size = 0.4)+
+  facet_wrap(~genre)+ 
+  labs(title = &quot;Gross Earnings vs. Movie Rating&quot;,
+       x = &quot;IMDB Movie rating&quot;,
+       y = &quot;Gross earnings in the US box office&quot;)</code></pre>
+<p><img src="/blogs/blog3_files/figure-html/gross_on_rating-1.png" width="672" />
+As we can see, dependency between IMDB rating and box office varies from notable positive (e.g. Action, Adventure) to negative (Documentary). Genres with only a couple points were not taken into account.</p>
+<p>However, this plot shows one very interesting feature of the dataset. Namely, it shows that a lot of movies with both quite high and quite low ratings have near-zero box office. We can suggest that there exists an underlying confounding variable which prevents us from distinction between movies with high rating and low box office and movies with low rating and low box office. Perhaps, the former represent festival-oriented or non-commercial cinema, while the latter are actually low-quality products not interesting to both critics and viewers.</p>
+</div>
+</div>
