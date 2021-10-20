@@ -56,7 +56,7 @@ params:
       - icon: fa-linkedin
         label: LinkedIn
         url: www.linkedin.com/in/samsonphil
-  image: jj.png
+  image: 
   name: Samson Philipose
   navigation:
     button1:

@@ -42,7 +42,7 @@ library(rvest)
 library(infer)
 ```
 
-# Climate change and temperature anomalies 
+## Climate change and temperature anomalies 
 
 
 If we wanted to study climate change, we can find data on the *Combined Land-Surface Air and Sea-Surface Water Temperature Anomalies* in the Northern Hemisphere at [NASA's Goddard Institute for Space Studies](https://data.giss.nasa.gov/gistemp). The [tabular data of temperature anomalies can be found here](https://data.giss.nasa.gov/gistemp/tabledata_v4/NH.Ts+dSST.txt)
@@ -94,7 +94,7 @@ Inspect your dataframe. It should have three variables now, one each for
 1. month, and 
 1. delta, or temperature deviation.
 
-## Plotting Information
+### Plotting Information
 
 Let us plot the data using a time-series scatter plot, and add a trendline. To do that, we first need to create a new variable called `date` in order to ensure that the `delta` values are plot chronologically. 
 
@@ -201,7 +201,7 @@ ggplot(average_annual_anomaly, aes(x=Year, y= annual_average_delta))+
 ```
 
 
-## Confidence Interval for `delta`
+### Confidence Interval for `delta`
 
 [NASA points out on their website](https://earthobservatory.nasa.gov/world-of-change/decadaltemp.php) that 
 
