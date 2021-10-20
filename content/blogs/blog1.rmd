@@ -3,12 +3,136 @@ categories:
 - ""
 - ""
 date: "2017-10-31T21:28:43-05:00"
-description: ""
+description: "This is the Yield Curve Inversion"
 draft: false
-image: pic10.jpg
+image: pic101.jpg
 keywords: ""
 slug: ipsum
-title: ipsum 
+title: Yield Curve
 ---
 
-Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis tempus.
+# Challenge 1: Yield Curve inversion
+
+
+
+```{r yield_curve_parable.jpg, echo=FALSE, out.width="100%"}
+knitr::include_graphics(here::here("images", "yield_curve_parable.jpg"), error = FALSE)
+```
+
+
+
+```{r yield_curve_challenge, echo=FALSE, out.width="100%"}
+knitr::include_graphics(here::here("images", "yield_curve_challenge.png"), error = FALSE)
+
+
+```
+
+
+
+```{r download_historical_yield_curve, warning=FALSE}
+
+yield_curve <- read_csv(here::here("data", "yield_curve.csv"))
+
+glimpse(yield_curve)
+```
+
+
+
+## Plotting the yield curve
+
+This may seem long but it should be easy to produce the following three plots
+
+### Yields on US rates by duration since 1960
+
+```{r yield_curve_1, echo=FALSE, out.width="100%"}
+knitr::include_graphics(here::here("images", "yield_curve1.png"), error = FALSE)
+
+ggplot(data = yield_curve,
+       aes(x = date, y = value, color = duration, grouping = duration)) +
+       geom_line() + 
+       facet_wrap(~duration)
+
+```
+
+### Monthly yields on US rates by duration since 1999 on a year-by-year basis
+
+
+```{r yield_curve_2, echo=FALSE, out.width="100%"}
+knitr::include_graphics(here::here("images", "yield_curve2.png"), error = FALSE)
+
+yield_order <- c("3m","6m","1y", "2y","3y","5y","7y","10y","20y","30y")
+
+yield_curve$year = year(yield_curve$date)
+yield_curve$month = month(yield_curve$date)
+
+
+ggplot(data = yield_curve %>% filter(year > 1998),
+       aes(x = factor(maturity, level = yield_order), y = value,color = year, group = month)) +
+       geom_line(line_width = 0.5) +
+       facet_wrap(~year)
+
+```
+
+
+
+### 3-month and 10-year yields since 1999
+
+```{r yield_curve_3, echo=FALSE, out.width="100%"}
+knitr::include_graphics(here::here("images", "yield_curve3.png"), error = FALSE)
+
+yield_curve$year = year(yield_curve$date)
+yield_curve$month = month(yield_curve$date)
+
+ggplot(data = yield_curve %>% filter(year > 1998, maturity == "3m" | maturity == "10y"), 
+       aes(x = date, y = value,colour = maturity, group = maturity)) +
+       geom_line(size = 0.5)
+
+```
+
+
+
+
+```{r setup_US-recessions, warning=FALSE}
+
+# get US recession dates after 1946 from Wikipedia 
+# https://en.wikipedia.org/wiki/List_of_recessions_in_the_United_States
+
+recessions <- tibble(
+  from = c("1948-11-01", "1953-07-01", "1957-08-01", "1960-04-01", "1969-12-01", "1973-11-01", "1980-01-01","1981-07-01", "1990-07-01", "2001-03-01", "2007-12-01","2020-02-01"),  
+  to = c("1949-10-01", "1954-05-01", "1958-04-01", "1961-02-01", "1970-11-01", "1975-03-01", "1980-07-01", "1982-11-01", "1991-03-01", "2001-11-01", "2009-06-01", "2020-04-30") 
+  )  %>% 
+  mutate(From = ymd(from), 
+         To=ymd(to),
+         duration_days = To-From)
+
+
+recessions
+```
+
+
+```{r yield_curve_4, echo=FALSE, out.width="100%"}
+
+yield_curve$Month_Yr <- format(as.Date(yield_curve$date), "%Y-%m")
+
+df_diff <- yield_curve %>% 
+  filter(duration==c("3-Month Treasury Bill","10-Year Treasury Rate")) %>%
+  pivot_wider(id_cols= date, 
+              names_from = duration, 
+              values_from = value) %>% 
+  rename(TenYr='10-Year Treasury Rate', ThreeMo='3-Month Treasury Bill')
+  
+df_diff$Diff <- df_diff$TenYr - df_diff$ThreeMo
+
+ggplot(data = df_diff, 
+       aes(x = date, y = Diff)) +
+       geom_line(size = 0.5) +
+       geom_ribbon(aes(ymin= 0, ymax= ifelse(Diff > 0, Diff, 0), group = 1), 
+              fill = "blue", alpha = 0.5) +
+       geom_ribbon(aes(ymin= 0, ymax= ifelse(Diff < 0, Diff, 0), group = 1), 
+              fill = "red", alpha = 0.5) +
+       geom_rect(data = recessions %>% filter(year(From) > 1960),
+                 aes(xmin = From, xmax = To, ymin = -5, ymax = 5),
+                 fill='darkgray',
+                 inherit.aes=FALSE,
+                 alpha=0.35)
+```

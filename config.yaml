@@ -5,7 +5,7 @@ theme: forty
 googleAnalytics: ''
 disqusShortname: ''
 params:
-  banner:
+  banner: 
     buttonText: Let's take a look
     subtitle: |-
       WELCOME! I AM SAMSON. THANKS FOR CLICKING IN. THIS IS A RESPONSIVE SITE TO UNDERSTAND MORE ABOUT ME AND HOW I CAN cONTRIBUTE TO YOUR BUSINESSs.
@@ -98,8 +98,8 @@ params:
         title: IMDB Movie ratings
         url: blogs/tempus
       - image: fire.jfif
-        subtitle: I have examples, I promise
-        title: Leadership and Soft Skills
+        subtitle: Stonks or Not Stonks?
+        title: Yield Curve Inversion
         url: blogs/ipsum
       - image: water.jfif
         subtitle: Climate Change
